@@ -1,6 +1,7 @@
 #
 # system.prop for w7
 #
+############################################################ CLEANUP ME PLEASE QUARX ###########################################################
 
 # Use reference RIL for initial bringup
 rild.libpath=/vendor/lib/libril-qc-qmi-1.so
@@ -84,7 +85,9 @@ persist.service.crash.enable=0
 ro.config.vc_call_vol_steps=6
 persist.data.sbp.update=0
 persist.radio.rat_on=legacy
+<<<<<<< HEAD
 ro.lge.proximity.delay=25
+=======
 
 
 # Hardware info
@@ -94,4 +97,4 @@ ro.device.gpu=Qualcomm Adreno 305 (450 - MHz)
 ro.device.rear_cam=8 Mpix (3464 x 2312)
 ro.device.front_cam=VGA (640x480)
 ro.device.screen_res=4,7' 960x540 pixels ( ~234 ppi)
-
+>>>>>>> 2902145... initial rr
