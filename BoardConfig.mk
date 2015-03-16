@@ -31,11 +31,12 @@ TARGET_UNIFIED_DEVICE := true
 TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_LIBINIT_DEFINES_FILE := device/lge/w7/init/init_w7.c
 
+
 # Platform
 TARGET_ARCH := arm
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
 TARGET_BOARD_PLATFORM := msm8226
-TARGET_CPU_VARIANT := krait
+TARGET_CPU_VARIANT := cortex-a7
 TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
 TARGET_USE_KINGFISHER_OPTIMIZATION := true
 TARGET_CPU_ABI := armeabi-v7a
@@ -44,15 +45,58 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 ARCH_ARM_HAVE_TLS_REGISTER := true
 TARGET_BOOTLOADER_BOARD_NAME := w7
 
+#Judas'es flags
+TARGET_GLOBAL_CFLAGS += -march=armv7-a -mtune=cortex-a7 -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_CPPFLAGS += -march=armv7-a -mtune=cortex-a7 -mfpu=neon -mfloat-abi=softfp
+TARGET_GLOBAL_FLAGS += -implicit-function-declaration
+TARGET_GLOBAL_CFLAGS += -implicit-function-declaration
+SUPPRES_UNUSED_WARNING := true
+TARGET_USE_O3 := true
+STRICT_ALIASING := true
+OPT_MEMORY := true
+TARGET_CPU_SMP := true
+TARGET_GCC_VERSION_ARM := 4.8
+ENABLE_GRAPHITE := true
+
+# Architecture
+# TARGET_ARCH := arm
+# TARGET_BOARD_PLATFORM_GPU := qcom-adreno305
+# TARGET_BOARD_PLATFORM := msm8226
+# TARGET_CPU_VARIANT := cortex-a7
+# TARGET_ARCH_VARIANT_CPU := cortex-a9
+# TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
+# TARGET_USE_KINGFISHER_OPTIMIZATION := true
+# TARGET_CPU_ABI := armeabi-v7a
+# TARGET_CPU_ABI2 := armeabi
+# TARGET_ARCH_VARIANT := armv7-a-neon
+# ARCH_ARM_HAVE_TLS_REGISTER := true
+# TARGET_BOOTLOADER_BOARD_NAME := w7
+# ARCH_ARM_HAVE_NEON := true
+# TARGET_GLOBAL_CFLAGS += -mtune=cortex-a7 -mfpu=neon -mfloat-abi=softfp
+# TARGET_GLOBAL_CPPFLAGS += -mtune=cortex-a7 -mfpu=neon -mfloat-abi=softfp
+# SUPPRES_UNUSED_WARNING := true
+# OPT_MEMORY := true
+# TARGET_CPU_SMP := true
+
 # Kernel image
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_CUSTOM_BOOTIMG_MK := device/lge/w7/mkbootimg.mk
 TARGET_KERNEL_SOURCE := kernel/lge/msm8226
-TARGET_KERNEL_CONFIG := cm11_msm8226_defconfig
+TARGET_KERNEL_CONFIG := w7_defconfig
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 user_debug=31 msm_rtb.filter=0x37 androidboot.hardware=w7
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
+# TARGET_KERNEL_CUSTOM_TOOLCHAIN := linaro/bin/arm-cortex_a7-linux-gnueabihf-
+
+
+# Offmode Charging
+COMMON_GLOBAL_CFLAGS += \
+    -DBOARD_CHARGING_CMDLINE_NAME='"androidboot.mode"' \
+    -DBOARD_CHARGING_CMDLINE_VALUE='"chargerlogo"'
+
+# Enable dex-preoptimization to speed up first boot sequence
+WITH_DEXPREOPT := false
 
 # Global flags
 COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DLG_CAMERA_HARDWARE
@@ -61,19 +105,31 @@ COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DLG_CAMERA_HARDWARE
 TARGET_USES_QCOM_BSP := true
 COMMON_GLOBAL_CFLAGS += -DQCOM_BSP
 
+# QCOM hardware
+BOARD_USES_QCOM_HARDWARE := true
+TARGET_USES_QCOM_BSP := true
+TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
+
+# RIL
+BOARD_RIL_CLASS := ../../../device/lge/w7/ril/
+
 # Audio
 AUDIO_FEATURE_DISABLED_FM := false
-AUDIO_FEATURE_DISABLED_SSR := true
 BOARD_HAVE_QCOM_FM := true
-AUDIO_FEATURE_DISABLED_ANC_HEADSET := true
-AUDIO_FEATURE_DISABLED_DS1_DOLBY_DDP := true
+AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := true
+AUDIO_FEATURE_ENABLED_EXTN_FORMATS := true
+AUDIO_FEATURE_ENABLED_FLUENCE := true
+AUDIO_FEATURE_ENABLED_FM := true
+AUDIO_FEATURE_ENABLED_INCALL_MUSIC := true
+AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
+AUDIO_FEATURE_ENABLED_PCM_OFFLOAD := true
+AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
+TARGET_USES_QCOM_MM_AUDIO := true
 BOARD_USES_ALSA_AUDIO := true
 BOARD_USES_FLUENCE_INCALL := true
 BOARD_USES_SEPERATED_AUDIO_INPUT := true
 BOARD_USES_SEPERATED_VOICE_SPEAKER := true
-TARGET_QCOM_AUDIO_VARIANT := caf
 TARGET_USES_QCOM_COMPRESSED_AUDIO := true
-TARGET_QCOM_MEDIA_VARIANT := caf-new
 
 # GPS
 TARGET_NO_RPC := true
@@ -81,7 +137,6 @@ TARGET_NO_RPC := true
 # Graphics
 BOARD_EGL_CFG := device/lge/w7/prebuilt/egl.cfg
 TARGET_DISPLAY_USE_RETIRE_FENCE := true
-TARGET_QCOM_DISPLAY_VARIANT := caf-new
 USE_OPENGL_RENDERER := true
 TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
@@ -119,12 +174,6 @@ WIFI_DRIVER_FW_PATH_AP := "ap"
 # Enable WEBGL in WebKit
 ENABLE_WEBGL := true
 TARGET_FORCE_CPU_UPLOAD := true
-
-# QCOM hardware
-BOARD_USES_QCOM_HARDWARE := true
-
-# QCOM enhanced A/V
-TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
@@ -176,58 +225,11 @@ BOARD_HAS_NO_MISC_PARTITION := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TARGET_INCREMENTAL_OTA_VERBATIM_FILES := system/app/Provision.apk
 
+# Enable Minikin text layout engine (will be the default soon)
+USE_MINIKIN := true
+
+# Include an expanded selection of fonts
+EXTENDED_FONT_FOOTPRINT := true
+
 # Nfc
-BOARD_NFC_HAL_SUFFIX := w7
 BOARD_NFC_CHIPSET := pn547
-
-# SELinux
-BOARD_SEPOLICY_DIRS += \
-	device/lge/w7/sepolicy
-
-BOARD_SEPOLICY_UNION += \
-	adbd.te \
-	app.te \
-	bluetooth_loader.te \
-	bridge.te \
-	camera.te \
-	device.te \
-	dhcp.te \
-	dnsmasq.te \
-	domain.te \
-	drmserver.te \
-	file_contexts \
-	file.te \
-	hostapd.te \
-	init_shell.te \
-	init.te \
-	libqc-opt.te \
-	mediaserver.te \
-	mpdecision.te \
-	netd.te \
-	netmgrd.te \
-	nfc.te \
-	property_contexts \
-	property.te \
-	qcom.te \
-	qmux.te \
-	radio.te \
-	rild.te \
-	rmt.te \
-	sdcard_internal.te \
-	sdcardd.te \
-	sensors.te \
-	shell.te \
-	surfaceflinger.te \
-	system.te \
-	tee.te \
-	te_macros \
-	thermald.te \
-	ueventd.te \
-	vold.te \
-	wpa_supplicant.te \
-	zygote.te
-
-ifneq ($(TARGET_BUILD_VARIANT),user)
-	BOARD_SEPOLICY_UNION += su.te
-endif
-
