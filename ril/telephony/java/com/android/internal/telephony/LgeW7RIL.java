@@ -48,7 +48,6 @@ public class LgeW7RIL extends RIL implements CommandsInterface {
 
     public LgeW7RIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
-        mSetPreferredNetworkType = -1;
         mQANElements = 5;
     }
 
